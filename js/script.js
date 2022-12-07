@@ -20,7 +20,7 @@ document.querySelector('button').addEventListener('click', () => {
 function createGrid(N){
   const grid = document.querySelector('.grid');
   const bombs = fillBombs(N);
-  
+  console.log(bombs.sort(function(a,b){return a-b;}));
   if(grid)
       grid.innerHTML = null;
 
@@ -38,15 +38,16 @@ function createGridElement(i, N, bombs, grid){
     e.style.height = e.style.width = `calc(100%/${Math.sqrt(N)})`;
 
     e.addEventListener('click', function(){
+  
       if(bombs.find(j => this.innerText == j)){
         setTimeout(()=>alert("Hai perso"), 75);
-        endGame(N, bombs, grid).then();
+        endGame(N, bombs, grid);
       }
       else{
         this.classList.add("active");
-        setTimeout(() =>checkVictory(N, bombs, grid), 500);
+        setTimeout(()=>checkVictory(N, bombs, grid), 75);
       }
-    })
+    },{once: "true"});
     
     return e;
 }
@@ -68,19 +69,18 @@ function checkVictory(N, bombs, grid){
   const cellsActive = document.querySelectorAll('.grid .active');
 
   if((cellsActive.length) == (N - bombs.length)){
-    alert(`Congratulazioni, hai fatto ${N - bombs.length}`);
+    alert(`Congratulazioni, hai fatto ${N - bombs.length} punti`);
     endGame(N, bombs, grid);
   }
 }
 
 function endGame(N, bombs, grid){
-
   bombs.forEach(k => {
      let bomb = grid.childNodes[k-1];
      bomb.innerText = '';
      bomb.style.backgroundColor = 'rgb(225, 52, 104)';
      bomb.innerHTML = '<i class="fa-solid fa-bomb"></i>';
   });
-  setTimeout(() => createGrid(N), 2500);
-
+  grid.outerHTML = grid.outerHTML;
+  setTimeout(() => createGrid(N), 2000);
 }
