@@ -20,7 +20,7 @@ document.querySelector('button').addEventListener('click', () => {
 function createGrid(N){
   const grid = document.querySelector('.grid');
   const bombs = fillBombs(N);
-  console.log(bombs.sort(function(a,b){ return a - b}))
+  
   if(grid)
       grid.innerHTML = null;
 
@@ -39,8 +39,8 @@ function createGridElement(i, N, bombs, grid){
 
     e.addEventListener('click', function(){
       if(bombs.find(j => this.innerText == j)){
-        alert("Hai Perso")
-        endGame(N, bombs, grid);
+        setTimeout(()=>alert("Hai perso"), 75);
+        endGame(N, bombs, grid).then();
       }
       else{
         this.classList.add("active");
