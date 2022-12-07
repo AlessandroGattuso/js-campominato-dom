@@ -20,17 +20,16 @@ document.querySelector('button').addEventListener('click', () => {
 //Function to create a grid
 function createGrid(N){
   const grid = document.querySelector('.grid');
-  //bombs is an array that we save the cells where there is a bomb
+  //bombs is an array that we save the cells that have a bomb
   const bombs = fillBombs(N);
   
-  //if we already created a list cancel it
+  //if we already created a list, cancel it
   if(grid)
       grid.innerHTML = null;
 
-  //create the element and append to our grid and do it for N
-  for(let i = 1; i <= N; ++i){
+  //create the element and append to our grid and do it for the number of cells
+  for(let i = 1; i <= N; ++i)
       grid.appendChild(createGridElement(i,N,bombs,grid));
-  }
 
 } 
 
@@ -53,8 +52,10 @@ function createGridElement(i, N, bombs, grid){
       //else add class active to the cell
       else{
         this.classList.add("active");
-        //we want to know if the cell the user clicked is the last cell of the cells where there is not a bomb
-        //we used setTimeout to have a little delay
+        /* 
+           we want to know if the cell the user clicked is the last cell of the cells where there is not a bomb
+           we used setTimeout to have a little delay
+        */
         setTimeout(()=>checkVictory(N, bombs, grid), 75);
       }
     },{once: "true"}); //once: true is an option that we say to run the event once
@@ -68,8 +69,9 @@ function fillBombs(N){
   let i = 0;
   //Number of bombs in the game are 16
   while(i <  16){
+    //create a random number in a range 
     let rand = Math.floor(Math.random() * N + 1);
-    //if the number doesn't already exists in the array create a random number in a range and put it inside the array
+    //if the number doesn't already exists in the array and put it inside the array
     if(!(bombs.includes(rand))){
         bombs.push(rand);
         ++i; 
@@ -78,7 +80,7 @@ function fillBombs(N){
   return bombs;
 }
 
-//Function we check if the user clicked the last cell of "non-bombs" cells
+//Function that we check if the user clicked the last remain cell of the "non-bombs" cells
 function checkVictory(N, bombs, grid){
   //select ecery cell have the class active
   const cellsActive = document.querySelectorAll('.grid .active');
@@ -92,7 +94,7 @@ function checkVictory(N, bombs, grid){
 
 //Function that end the game
 function endGame(N, bombs, grid){
-  //We show every bomb in the game
+  //We show every cell's bomb in the game
   bombs.forEach(k => {
      let bomb = grid.childNodes[k-1];
      bomb.innerText = '';
@@ -102,6 +104,6 @@ function endGame(N, bombs, grid){
   //This instruction it helps us that the user can't trigger other events inside the grid
   grid.outerHTML = grid.outerHTML;
 
-  //At the end we wait 2 seconds to show the result and after that we create another game
+  //At the end we wait 2 seconds to show the result and after that we create another game with create grid function
   setTimeout(() => createGrid(N), 2000);
 }
